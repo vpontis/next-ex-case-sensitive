@@ -1,0 +1,17 @@
+FROM node:14-alpine
+
+WORKDIR /usr/src/app
+
+# Set up all of the files used by yarn install
+COPY package.json .
+COPY yarn.lock .
+
+RUN yarn --frozen-lockfile --non-interactive
+
+# Copy over files to use for actually running the app
+COPY . .
+
+ENV NODE_ENV production
+RUN yarn build
+
+CMD ["yarn", "start", "-p", "80"]
